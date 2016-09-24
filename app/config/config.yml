@@ -6,11 +6,11 @@ imports:
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    locale: en
+    locale: fr
 
 framework:
     #esi:             ~
-    #translator:      { fallbacks: ["%locale%"] }
+    translator:      { fallbacks: ["%locale%"] }
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -36,6 +36,16 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    form_themes:
+        # Default:
+        - form_div_layout.html.twig
+
+        # Bootstrap:
+        - bootstrap_3_layout.html.twig
+        - bootstrap_3_horizontal_layout.html.twig
+
+        # Foundation
+        - foundation_5_layout.html.twig
 
 # Doctrine Configuration
 doctrine:
@@ -71,3 +81,41 @@ fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
     user_class: StatsBundle\Entity\User
+
+# Assetic Configuration
+assetic:
+    debug:          "%kernel.debug%"
+    use_controller: "%kernel.debug%"
+
+    filters:
+        cssrewrite: ~
+    assets:
+        bootstrap_js:
+            inputs:
+                - %kernel.root_dir%/../vendor/twitter/bootstrap/dist/js/bootstrap.js
+        bootstrap_css:
+            inputs:
+                - %kernel.root_dir%/../vendor/twitter/bootstrap/dist/css/bootstrap.css
+                - %kernel.root_dir%/../vendor/twitter/bootstrap/dist/css/bootstrap-theme.css
+            filters: [cssrewrite]
+
+        bootstrap_glyphicons_ttf:
+            inputs:
+                - %kernel.root_dir%/../vendor/twitter/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf
+            output: "fonts/glyphicons-halflings-regular.ttf"
+        bootstrap_glyphicons_eot:
+            inputs:
+                - %kernel.root_dir%/../vendor/twitter/bootstrap/dist/fonts/glyphicons-halflings-regular.eot
+            output: "fonts/glyphicons-halflings-regular.eot"
+        bootstrap_glyphicons_svg:
+            inputs:
+                - %kernel.root_dir%/../vendor/twitter/bootstrap/dist/fonts/glyphicons-halflings-regular.svg
+            output: "fonts/glyphicons-halflings-regular.svg"
+        bootstrap_glyphicons_woff:
+            inputs:
+                - %kernel.root_dir%/../vendor/twitter/bootstrap/dist/fonts/glyphicons-halflings-regular.woff
+            output: "fonts/glyphicons-halflings-regular.woff"
+
+        jquery:
+            inputs:
+                - %kernel.root_dir%/../vendor/components/jquery/jquery.js
