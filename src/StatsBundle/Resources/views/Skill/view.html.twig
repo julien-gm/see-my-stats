@@ -1,0 +1,38 @@
+{% extends "StatsBundle::layout.html.twig" %}
+
+{% block title %}
+    Compétence - {{ parent() }}
+{% endblock %}
+
+{% block sms_body %}
+
+    <div class="row">
+        <div class="col-sm-8">
+            <h2>{{ skill.name}}</h2>
+        </div>
+    </div>
+
+    <p>
+        <a href="{{ path('sms_home') }}" class="btn btn-default">
+            <i class="glyphicon glyphicon-chevron-left"></i>
+            Retour à la liste
+        </a>
+        <a href="{{ path('sms_edit', {'skill': skill}) }}" class="btn btn-default">
+            <i class="glyphicon glyphicon-edit"></i>
+            Modifier la compétence
+        </a>
+        <a href="{{ path('sms_delete', {'skill': skill}) }}" class="btn btn-danger">
+            <i class="glyphicon glyphicon-trash"></i>
+            Supprimer la compétence
+        </a>
+    </p>
+    {% if not advert.categories.empty %}
+        <p>
+            Cette compétence est utilisée par les joueurs suivants :
+            {% for player in skill.users %}
+                {{ user.name }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+    {% endif %}
+
+{% endblock %}

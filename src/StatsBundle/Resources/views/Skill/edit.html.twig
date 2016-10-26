@@ -1,0 +1,24 @@
+{% extends "StatsBundle::layout.html.twig" %}
+
+{% block title %}
+    Modifier une compétence- {{ parent() }}
+{% endblock %}
+
+{% block sms_body %}
+
+    <h2>Modifier une compétence</h2>
+
+    {{ include("StatsBundle:Skill:form.html.twig") }}
+
+    <p>
+        Vous éditez une compétence déjà existante.
+    </p>
+
+    <p>
+        <a href="{{ path('sms_view', {'skill': skill}) }}" class="btn btn-default">
+            <i class="glyphicon glyphicon-chevron-left"></i>
+            Retour à la compétence
+        </a>
+    </p>
+
+{% endblock %}

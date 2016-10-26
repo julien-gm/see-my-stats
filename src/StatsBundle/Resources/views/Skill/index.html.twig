@@ -1,0 +1,31 @@
+{% extends "Statsundle::layout.html.twig" %}
+
+{% block title %}
+    Accueil - {{ parent() }}
+{% endblock %}
+
+{% block sms_body %}
+
+    <h2>Liste des compétences</h2>
+
+    <ul>
+        {% for skill in listSkills %}
+            <li>
+                <a href="{{ path('sms_view', {'skill': skill}) }}">
+                    {{ skill.name}}
+                </a>
+            </li>
+        {% else %}
+            <li>Pas (encore !) de compétences</li>
+        {% endfor %}
+    </ul>
+    <ul class="pagination">
+        {# On utilise la fonction range(a, b) qui crée un tableau de valeurs entre a et b #}
+        {% for p in range(1, nbPages) %}
+            <li{% if p == page %} class="active"{% endif %}>
+                <a href="{{ path('sms_home', {'page': p}) }}">{{ p }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

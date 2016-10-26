@@ -115,7 +115,7 @@ class AdminController extends Controller
             return $this->redirectToRoute('sms_home');
         }
 
-        return $this->render('OCPlatformBundle:Advert:delete.html.twig', array(
+        return $this->render('OCPlatformBundle:Skill:delete.html.twig', array(
             'advert' => $advert,
             'form'   => $form->createView(),
         ));

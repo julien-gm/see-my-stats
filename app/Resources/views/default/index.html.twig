@@ -4,6 +4,11 @@
     <div id="welcome">
         <h1><span>Welcome to</span> See My Stats {{ user.username }}</h1>
     </div>
+    {% for message in app.session.flashbag.get('notice') %}
+        <div class="alert alert-info">
+            <p>Message flash : {{ message }}</p>
+        </div>
+    {% endfor %}
     <p>
 
     </p>

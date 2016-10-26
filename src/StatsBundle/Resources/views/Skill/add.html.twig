@@ -1,0 +1,20 @@
+{% extends "StatsBundle::layout.html.twig" %}
+
+{% block title %}
+    Créer une annonce - {{ parent() }}
+{% endblock %}
+
+{% block sms_body %}
+
+    <h2>Créer une annonce</h2>
+
+    {{ include("StatsBundle:Skill:form.html.twig") }}
+
+    <p>
+        <a href="{{ path('sms_home') }}" class="btn btn-default">
+            <i class="glyphicon glyphicon-chevron-left"></i>
+            Retour à l'accueil
+        </a>
+    </p>
+
+{% endblock %}
