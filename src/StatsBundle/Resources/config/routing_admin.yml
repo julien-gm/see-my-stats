@@ -1,0 +1,18 @@
+sms_add:
+    path:      /add
+    defaults:
+        _controller: StatsBundle:Admin:addSkill
+
+sms_edit:
+    path:      /edit/{id}
+    defaults:
+        _controller: StatsBundle:Admin:editSkill
+    requirements:
+        id: \d+
+
+sms_delete:
+    path:      /delete/{id}
+    defaults:
+        _controller: StatsBundle:Admin:deleteSkill
+    requirements:
+        id: \d+

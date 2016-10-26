@@ -12,7 +12,7 @@ class InitAdminCommand extends ContainerAwareCommand
 {
 
     /**
-     *
+     * @inheritdoc
      */
     public function configure()
     {
@@ -39,7 +39,14 @@ class InitAdminCommand extends ContainerAwareCommand
             '',
         ]);
 
+        $userManager = $this->getContainer()->get('stats.user_manager');
+
         $username = $input->getArgument('username');
+
+        if (!empty($user = $userManager->getUserByUsername($username))) {
+            $userManager->updateUserRoles($user, ['ROLE_ADMIN']);
+            exit;
+        }
         $helper = $this->getHelper('question');
         $question = new Question('What will be the password for ' . $username . '?');
 
@@ -60,8 +67,6 @@ class InitAdminCommand extends ContainerAwareCommand
 
         $email = new Question('What is your email?');
         $email = $helper->ask($input, $output, $email);
-
-        $userManager = $this->getContainer()->get('stats.user_manager');
         $userManager->createAdmin($username, $email, $password);
 
         $output->writeln('User successfully generated!');

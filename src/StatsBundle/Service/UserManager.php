@@ -12,6 +12,10 @@ class UserManager
     private $em;
 
 
+    /**
+     * UserManager constructor.
+     * @param EntityManager $em
+     */
     public function __construct(EntityManager $em)
     {
         $this->em = $em;
@@ -33,8 +37,28 @@ class UserManager
         $user->setPlainPassword($password);
         $user->setEmail($email);
         $user->setEnabled(true);
-        $user->setRoles(['ADMIN']);
+        $user->setRoles(['ROLE_ADMIN']);
 
+        $this->em->persist($user);
+        $this->em->flush();
+    }
+
+    /**
+     * @param string $username
+     * @return User
+     */
+    public function getUserByUsername($username)
+    {
+        return $this->em->getRepository('StatsBundle:User')->findOneBy(['username' => $username]);
+    }
+
+    /**
+     * @param User $user
+     * @param array $roles
+     */
+    public function updateUserRoles(User $user, array $roles)
+    {
+        $user->setRoles($roles);
         $this->em->persist($user);
         $this->em->flush();
     }
