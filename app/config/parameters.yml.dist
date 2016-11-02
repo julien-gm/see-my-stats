@@ -21,3 +21,4 @@ parameters:
     # The name and password of the first admin
     admin_name: admin_name
     admin_pwd: admin_pwd
+    nb_item_per_page: 5
