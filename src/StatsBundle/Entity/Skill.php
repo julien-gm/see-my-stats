@@ -60,4 +60,9 @@ class Skill
     {
         return $this->name;
     }
+
+    public function getUsers()
+    {
+        return array();
+    }
 }

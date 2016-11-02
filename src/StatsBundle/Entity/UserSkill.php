@@ -23,13 +23,13 @@ class UserSkill
     private $level;
 
     /**
-     * @ORM\ManyToOne(targetEntity="OC\PlatformBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="OC\PlatformBundle\Entity\Skill")
+     * @ORM\ManyToOne(targetEntity="Skill")
      * @ORM\JoinColumn(nullable=false)
      */
     private $skill;
@@ -72,11 +72,11 @@ class UserSkill
     /**
      * Set advert
      *
-     * @param \OC\PlatformBundle\Entity\Player $user
+     * @param User $user
      *
      * @return UserSkill
      */
-    public function setUser(\OC\PlatformBundle\Entity\Player $user)
+    public function setUser(User $user)
     {
         $this->user = $user;
 
@@ -86,7 +86,7 @@ class UserSkill
     /**
      * Get advert
      *
-     * @return Player
+     * @return User
      */
     public function getUser()
     {

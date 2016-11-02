@@ -1,6 +1,6 @@
 <?php
 
-namespace OC\PlatformBundle\Repository;
+namespace StatsBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;

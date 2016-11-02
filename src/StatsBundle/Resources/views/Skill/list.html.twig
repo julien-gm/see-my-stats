@@ -1,4 +1,4 @@
-{% extends "Statsundle::layout.html.twig" %}
+{% extends "StatsBundle::layout.html.twig" %}
 
 {% block title %}
     Accueil - {{ parent() }}
@@ -11,7 +11,7 @@
     <ul>
         {% for skill in listSkills %}
             <li>
-                <a href="{{ path('sms_view_skill', {'skill': skill}) }}">
+                <a href="{{ path('sms_view_skill', {'id': skill.id}) }}">
                     {{ skill.name}}
                 </a>
             </li>
@@ -19,9 +19,10 @@
             <li>Pas (encore !) de compétences</li>
         {% endfor %}
     </ul>
+    <a href="{{ path('sms_add_skill') }}">Ajouter une compétence</a>
     <ul class="pagination">
         {# On utilise la fonction range(a, b) qui crée un tableau de valeurs entre a et b #}
-        {% for p in range(1, nbPages) %}
+        {% for p in range(1, nbPages) if p > 0 %}
             <li{% if p == page %} class="active"{% endif %}>
                 <a href="{{ path('sms_home', {'page': p}) }}">{{ p }}</a>
             </li>

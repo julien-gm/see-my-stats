@@ -4,6 +4,8 @@ namespace StatsBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
 use StatsBundle\Entity\Skill;
+use StatsBundle\Form\SkillType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,37 +15,55 @@ class AdminController extends Controller
 {
     public function indexAction($page)
     {
-        $nbPerPage = $this->getParameter('nb_user_per_page');
+        $nbPerPage = $this->getParameter('nb_item_per_page');
 
         // On récupère notre objet Paginator
-        $listAdverts = $this->getDoctrine()
+        $users = $this->getDoctrine()
             ->getManager()
             ->getRepository('StatsBundle:User')
             ->getUsers($page, $nbPerPage)
         ;
-        $nbPages = ceil(count($listAdverts) / $nbPerPage);
+        $nbPages = ceil(count($users) / $nbPerPage);
         if ($page < 1 || $page > $nbPages) {
             throw $this->createNotFoundException("La page $page n'existe pas.");
         }
 
-        return $this->render('admin/index.html.twig', ['admin' => $this->getUser()]);
+        return $this->render('admin/index.html.twig', ['admin' => $this->getUser(), 'nbPages' => $nbPages, 'users' => $users]);
     }
 
     public function viewSkillAction(Skill $skill)
     {
+        /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
         if (null === $skill) {
             throw new NotFoundHttpException("La compétence n'existe pas.");
         }
 
-        $listAdvertSkills = $em
-            ->getRepository('OCPlatformBundle:AdvertSkill')
-            ->findBy(array('skill' => $skill));
-
         return $this->render('StatsBundle:Skill:view.html.twig', array(
-            'skill'          => $skill,
-            'listUserSkills' => $listAdvertSkills
+            'skill' => $skill
+        ));
+    }
+
+    public function listSkillsAction($page)
+    {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        $listSkills = $em
+            ->getRepository('StatsBundle:Skill')
+            ->findAll();
+        $nbPerPage = $this->getParameter('nb_item_per_page');
+
+        $nbPages = ceil(count($listSkills) / $nbPerPage);
+        if ($nbPages > 0 && ($page < 1 || $page > $nbPages)) {
+            throw $this->createNotFoundException("La page $page n'existe pas.");
+        }
+
+        return $this->render('StatsBundle:Skill:list.html.twig', array(
+            'listSkills' => $listSkills,
+            'nbPages'    => $nbPages,
+            'page'       => $page
         ));
     }
 
@@ -55,14 +75,14 @@ class AdminController extends Controller
     {
         $skill = new Skill();
 
-        $form = $this->createForm(Skill::class, $skill);
+        $form = $this->createForm(SkillType::class, $skill);
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($skill);
             $em->flush();
             $request->getSession()->getFlashBag()->add('notice', 'Compétence bien enregistrée.');
 
-            return $this->redirectToRoute('sms_skill_view', array('id' => $skill->getId()));
+            return $this->redirectToRoute('sms_view_skill', array('id' => $skill->getId()));
         }
 
         return $this->render('StatsBundle:Skill:add.html.twig', array(
@@ -70,6 +90,14 @@ class AdminController extends Controller
         ));
     }
 
+    /**
+     * @param Skill $skill
+     * @param Request $request
+     *
+     * @ParamConverter("skill", class="StatsBundle:Skill")
+     *
+     * @return Response
+     */
     public function editSkillAction(Skill $skill, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
@@ -78,14 +106,14 @@ class AdminController extends Controller
             throw new NotFoundHttpException("Cette compétence n'existe pas.");
         }
 
-        $form = $this->get('form.factory')->create(Skill::class, $skill);
+        $form = $this->get('form.factory')->create(SkillType::class, $skill);
 
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
             $em->flush();
 
             $request->getSession()->getFlashBag()->add('notice', 'Compétence bien modifiée.');
 
-            return $this->redirectToRoute('sms_skill_view', array('id' => $skill->getId()));
+            return $this->redirectToRoute('sms_view_skill', array('id' => $skill->getId()));
         }
 
         return $this->render('StatsBundle:Skill:edit.html.twig', array(
@@ -94,20 +122,19 @@ class AdminController extends Controller
         ));
     }
 
-    public function deleteAction(Request $request, $id)
+
+    public function deleteSkillAction(Request $request, Skill $skill)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $advert = $em->getRepository('StatsBundle:Skill')->find($id);
-
-        if (null === $advert) {
-            throw new NotFoundHttpException("La compétence d'id $id n'existe pas.");
+        if (null === $skill) {
+            throw new NotFoundHttpException("La compétence n'existe pas.");
         }
 
         $form = $this->get('form.factory')->create();
 
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
-            $em->remove($advert);
+            $em->remove($skill);
             $em->flush();
 
             $request->getSession()->getFlashBag()->add('info', "La compétence a bien été supprimée.");
@@ -115,9 +142,9 @@ class AdminController extends Controller
             return $this->redirectToRoute('sms_home');
         }
 
-        return $this->render('OCPlatformBundle:Skill:delete.html.twig', array(
-            'advert' => $advert,
-            'form'   => $form->createView(),
+        return $this->render('StatsBundle:Skill:delete.html.twig', array(
+            'skill' => $skill,
+            'form'  => $form->createView(),
         ));
     }
 
@@ -128,7 +155,7 @@ class AdminController extends Controller
 
         $listAdverts = $em->getRepository('StatsBundle:User')->getUsers(1, $limit);
 
-        return $this->render('StatsBundle:User:menu.html.twig', array(
+        return $this->render('StatsBundle:Skill:menu.html.twig', array(
             'listUsers' => $listAdverts
         ));
     }

@@ -1,12 +1,7 @@
-{# src/OC/PlatformBundle/Resources/views/Advert/menu.html.twig #}
-
-{# Ce template n'hérite de personne,
-   tout comme le template inclus avec {{ include() }}. #}
-
 <ul class="nav nav-pills nav-stacked">
     {% for skill in listSkills %}
         <li>
-            <a href="{{ path('sms_view', {'skill': skill}) }}">
+            <a href="{{ path('sms_view_skill', {'skill': skill}) }}">
                 {{ skill.name }}
             </a>
         </li>

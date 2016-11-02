@@ -1,17 +1,32 @@
-sms_add:
-    path:      /add
+sms_add_skill:
+    path:      /skill/add
     defaults:
         _controller: StatsBundle:Admin:addSkill
 
-sms_edit:
-    path:      /edit/{id}
+sms_list_skills:
+    path:      /skills/{page}
+    defaults:
+        _controller: StatsBundle:Admin:listSkills
+        page: 1
+    requirements:
+        page: \d+
+
+sms_edit_skill:
+    path:      /skill/edit/{id}
     defaults:
         _controller: StatsBundle:Admin:editSkill
     requirements:
         id: \d+
 
-sms_delete:
-    path:      /delete/{id}
+sms_view_skill:
+    path:      /skill/view/{id}
+    defaults:
+        _controller: StatsBundle:Admin:viewSkill
+    requirements:
+        id: \d+
+
+sms_delete_skill:
+    path:      /skill/delete/{id}
     defaults:
         _controller: StatsBundle:Admin:deleteSkill
     requirements:

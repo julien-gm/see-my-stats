@@ -6,7 +6,7 @@ sms_home:
     requirements:
         page: \d*
 
-sms_view:
+sms_view_user:
     path:      /user/{id}
     defaults:
         _controller: StatsBundle:Default:viewUser

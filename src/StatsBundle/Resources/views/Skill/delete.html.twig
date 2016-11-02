@@ -13,8 +13,8 @@
     </p>
 
     {# On met l'id de l'annonce dans la route de l'action du formulaire #}
-    <form action="{{ path('sms_delete', {'skill': skill}) }}" method="post">
-        <a href="{{ path('sms_view', {'skill': skill}) }}" class="btn btn-default">
+    <form action="{{ path('sms_delete_skill', {'id': skill.id}) }}" method="post">
+        <a href="{{ path('sms_view_skill', {'id': skill.id}) }}" class="btn btn-default">
             <i class="glyphicon glyphicon-chevron-left"></i>
             Retour à l'annonce
         </a>
